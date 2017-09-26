@@ -11,11 +11,19 @@ get('/') do
 end
 
 post('/') do
-  task = Task.new({:description => params["name"], :due_date => dd = params["dd"]})
-  task.save
-  erb(:index)
+  @task = Task.new({:description => params["name"], :due_date => dd = params["dd"]})
   @tasks = Task.all()
+  if @task.save()
+    erb(:success)
+  else
+    erb(:errors)
+  end
 end
+
+# get('/lists') do
+#   @lists = List.all()
+#   erb(:lists)
+# end
 
 get('/tasks/:id/edit') do
   @task = Task.find(params.fetch("id").to_i())

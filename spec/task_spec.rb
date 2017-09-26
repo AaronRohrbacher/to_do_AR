@@ -1,6 +1,15 @@
 require("spec_helper")
 
-describe(Task) do
+  describe(Task) do
+    it("converts the name to lowercase") do
+      task = Task.create({:description => "FINAGLE THE BUFFALO"})
+      expect(task.description()).to(eq("finagle the buffalo"))
+    end
+
+    it("ensures the length of description is at most 50 characters") do
+      task = Task.new({:description => "a".*(51)})
+      expect(task.save()).to(eq(false))
+    end
 
   describe(".not_done") do
     it("returns the not done tasks") do
@@ -17,6 +26,13 @@ describe(Task) do
       test_list = List.create({:name => "list"})
       test_task = Task.create({:description => "task", :list_id => test_list.id})
       expect(test_task.list()).to(eq(test_list))
+    end
+  end
+
+  describe(Task) do
+    it("validates presence of description") do
+      task = Task.new({:description => ""})
+      expect(task.save()).to(eq(false))
     end
   end
 end
